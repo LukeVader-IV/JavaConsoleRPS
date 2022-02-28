@@ -42,7 +42,7 @@ public class MainLoop {
 
                     //Ask for input
                     System.out.println("Rock(r) / Paper(p) / Scissor(s) (or quit :p) : ");
-                    toSend = scan.next();
+                    toSend = scan.nextLine();
 
                     if (isIn(toSend.toLowerCase(), new String[] {"r", "p", "s", "quit"})) {
                         inputCheck = false;
@@ -87,12 +87,11 @@ public class MainLoop {
                 }
 
             
-        }
+            }
 
-        socket.close();
-        in.close();
-        out.close();
-        scan.close();
+            socket.close();
+            in.close();
+            out.close();
 
         } catch (IOException e) {
             e.printStackTrace();

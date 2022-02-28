@@ -1,6 +1,7 @@
 package net.RPS;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -20,13 +21,13 @@ public class Launcher {
 
         while(menu) {
             //display the le stuff
-            System.out.println("\t\tRock Paper Scissor  O N L I N E !\n\n\t\t\t\t\tHugo Costa (Koraku)");
+            System.out.println("\t\tRock Paper Scissor  O N L I N E !\n\nHugo Costa (Koraku)");
             System.out.println("0 - Host a game\n1 - Join a hosted game\n2 - Quit");
 
             //Input
             while(checkInput) {
                 System.out.println("->");
-                input = scan.next();
+                input = scan.nextLine();
 
                 if(MainLoop.isIn(input.toLowerCase(), new String[] {"0", "1", "2", "quit"})) {
                     checkInput = false;
@@ -55,6 +56,7 @@ public class Launcher {
 
     }
 
+    //Join and Host
     private static void hostGame(Scanner scan) {
         System.out.println("Setting up game...");
 
@@ -67,7 +69,7 @@ public class Launcher {
         //Name
         while(inputCheck) {
             System.out.println("Choose a name (max 20 char) : ");
-            in = scan.next();
+            in = scan.nextLine();
             if (in.length() > 20) {
                 System.out.println("max 20 char.");
                 in = "";
@@ -85,7 +87,7 @@ public class Launcher {
         try {
                
             ss = new ServerSocket(0);
-            System.out.println("Game launched on port " + ss.getLocalPort() + ".\nWaiting for player to connect.");
+            System.out.println("Game launched on "+ getIP() + ":" +ss.getLocalPort() + ".\nWaiting for player to connect.");
 
             other = ss.accept();
             
@@ -109,7 +111,7 @@ public class Launcher {
         //Name
         while(inputCheck) {
             System.out.println("Choose a name (max 20 char) : ");
-            in = scan.next();
+            in = scan.nextLine();
             if (in.length() > 20) {
                 System.out.println("max 20 char.");
                 in = "";
@@ -129,7 +131,7 @@ public class Launcher {
 
         while(inputCheck) {
             System.out.println("Indicate game host and port (IPADRESS:PORT) : ");
-            tmp = scan.next();
+            tmp = scan.nextLine();
             
             String[] tmpArray = tmp.split(":");
 
@@ -145,11 +147,25 @@ public class Launcher {
                 inputCheck = true;
             } catch (IOException e) {
                 System.out.println("Can't create socket :\nCheck internet connection\nCheck IP and Port.\n");
+                e.printStackTrace();
                 inputCheck = true;
             }
         }
         System.out.println("Connection established.\n");
 
         new MainLoop().mainLoop(s, player);    
+    }
+
+    private static String getIP() {
+        String ip = "";
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            ip = localhost.getHostAddress().trim().toString();
+        
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+
+        return ip;
     }
 }
