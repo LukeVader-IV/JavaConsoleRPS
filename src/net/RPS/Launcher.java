@@ -16,43 +16,45 @@ public class Launcher {
         boolean menu = true;
 
         String input = "";
-        boolean checkInput = true;
 
         while(menu) {
-            //display the le stuff
-            System.out.println("\t\tRock Paper Scissor  O N L I NE !\n\n\t\t\t\t\tHugo Costa (Koraku)");
-            System.out.println("0 - Host a game\n1 - Join a hosted game\n2 - Quit");
-
-            //Input
-            while(checkInput) {
-                System.out.println("->");
-                input = scan.next();
-
-                if(MainLoop.isIn(input.toLowerCase(), new String[] {"0", "1", "2", "quit"})) {
-                    checkInput = false;
-                } else {
-                    checkInput = true;
-                    input = "";
-                    System.out.println("Please choose a valid option.");
-                }
-            }
+            input = showMenu(scan);
 
             //Actually doing stuff with said input.
-            if(input.toLowerCase().equals("quit") || input.toLowerCase().equals("2")) {
-                scan.close();//Clse the scanner stream and quit
-                break;
-            } else if (input.toLowerCase().equals("0")) {
+            if(input.equals("quit") || input.equals("2")) {
+                scan.close();//Close the scanner stream and quit
+                menu = false;
+            } else if (input.equals("0")) {
                 hostGame(scan);
-            } else if (input.toLowerCase().equals("1")) {
+            } else if (input.equals("1")) {
                 joinGame(scan);
             }
-            checkInput = true;
         }
 
         System.out.println("Quitting...");
         
 
 
+    }
+
+    private static String showMenu(Scanner scan){
+        //display the le stuff
+        System.out.println("\t\tRock Paper Scissor  O N L I NE !\n\n\t\t\t\t\tHugo Costa (Koraku)");
+        System.out.println("0 - Host a game\n1 - Join a hosted game\n2 - Quit");
+
+        String menu = "";
+        boolean checkInput = true;
+
+        do{
+            System.out.print("> ");
+            menu = scan.next().toLowerCase();
+            System.out.println();
+            checkInput = !MainLoop.isIn(menu, "0", "1", "2", "quit");
+            if(checkInput)
+                System.out.println("Please choose a valid option.");
+        }while(checkInput);
+
+        return menu;
     }
 
     private static void hostGame(Scanner scan) {
@@ -67,7 +69,11 @@ public class Launcher {
         //Name
         while(inputCheck) {
             System.out.println("Choose a name (max 20 char) : ");
+
+            System.out.print("> ");
             in = scan.next();
+            System.out.println();
+
             if (in.length() > 20) {
                 System.out.println("max 20 char.");
                 in = "";
@@ -109,7 +115,11 @@ public class Launcher {
         //Name
         while(inputCheck) {
             System.out.println("Choose a name (max 20 char) : ");
+
+            System.out.print("> ");
             in = scan.next();
+            System.out.println();
+
             if (in.length() > 20) {
                 System.out.println("max 20 char.");
                 in = "";
@@ -128,8 +138,11 @@ public class Launcher {
         Socket s = null;
 
         while(inputCheck) {
-            System.out.println("Indicate game host and port (IPADRESS:PORT) : ");
+            System.out.println("Indicate game host and port (IPADDRESS:PORT) : ");
+
+            System.out.print("> ");
             tmp = scan.next();
+            System.out.println();
             
             String[] tmpArray = tmp.split(":");
 
@@ -141,7 +154,7 @@ public class Launcher {
                 inputCheck = false;
 
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("Please follow the template IPADRESS:PORT\n");
+                System.out.println("Please follow the template IPADDRESS:PORT\n");
                 inputCheck = true;
             } catch (IOException e) {
                 System.out.println("Can't create socket :\nCheck internet connection\nCheck IP and Port.\n");

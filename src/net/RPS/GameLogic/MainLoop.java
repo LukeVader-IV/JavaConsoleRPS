@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Scanner;
 
 public class MainLoop {
@@ -17,6 +18,7 @@ public class MainLoop {
 
         Scanner scan = new Scanner(System.in);
         Player player2 = new Player();
+        boolean playing = true;
 
         try {
             DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -24,75 +26,87 @@ public class MainLoop {
 
 
             //Setup player2
-            //send the p1 data (wich is p2 on the other side)
+            //send the p1 data (which is p2 on the other side)
             out.writeUTF(player1.getName());
-            //Get the data from the other side (wich is p2 here)
+            //Get the data from the other side (which is p2 here)
             player2.setName(in.readUTF());
 
-            System.out.println("You are playing with : " +player2.getName() + " !");
+            System.out.println("You are playing with : " + player2.getName() + " !");
 
             String received = ""; //The thing that we recieve
             String toSend = ""; //What we need to send :p
 
             //The actual main loop xd
-            while(!(received.toLowerCase().equals("quit"))) {
-                boolean inputCheck = true;
+            while (playing) {
+                boolean inputCheck;
 
-                while (inputCheck) {
+                do {
 
                     //Ask for input
                     System.out.println("Rock(r) / Paper(p) / Scissor(s) (or quit :p) : ");
-                    toSend = scan.next();
 
-                    if (isIn(toSend.toLowerCase(), new String[] {"r", "p", "s", "quit"})) {
-                        inputCheck = false;
-                    } else {
+                    System.out.print("> ");
+                    toSend = scan.next().toLowerCase();
+                    System.out.println();
+
+                    inputCheck = !isIn(toSend, "r", "p", "s", "quit");
+                    if (inputCheck) {
                         System.out.println("Please enter valid input.");
                         toSend = "";
-                        inputCheck = true;
-                    }
-                
-                }
-
-                out.writeUTF(toSend);
-               
-                //recieve
-                received = in.readUTF();
-
-                if (!toSend.equals("quit") || !received.equals("quit")) {
-
-                    //Process the damn thing finally !
-                    int duelResult = Moves.processDuel(toSend, received);
-
-                    //Set score
-                    if (duelResult == 0) {
-                        player1.setScore(player1.getScore()+1);
-                    } else if (duelResult == 1){
-                        player2.setScore(player2.getScore()+1);
                     }
 
 
-                    //Send back the data (score and stuff(mostly score...))
-                    out.writeInt(player1.getScore());
+                } while (inputCheck);
 
-                    //Receive the le data
-                    player2.setScore(in.readInt());
 
-                    //display
-                    display(toSend, received, duelResult, player1, player2);
-
-                } else {
-                    System.out.println("Game ended.");
-                    //TODO : Display Scores uwu
+                if (toSend.equals("quit")) {
+                    playing = false;
+                    continue;
+                    //We don't run the bottom code and go to the next loop cycle.
+                    //No need to send the message, it won't be seen.
                 }
 
-            
-        }
+                try {
+                    out.writeUTF(toSend);
+                    received = in.readUTF();
+                }catch (IOException e){
+                    //Connexion has been lost
+                    System.out.println("Connexion with "+player2.getName()+" has been lost");
+                    playing = false;
+                    continue;
+                }
 
-        socket.close();
-        in.close();
-        out.close();
-        scan.close();
+                //Process the damn thing finally !
+                int duelResult = Moves.processDuel(toSend, received);
+
+                //Set score
+                if (duelResult == 0) {
+                    player1.setScore(player1.getScore() + 1);
+                } else if (duelResult == 1) {
+                    player2.setScore(player2.getScore() + 1);
+                }
+
+
+                //Send back the data (score and stuff(mostly score...))
+                out.writeInt(player1.getScore());
+
+                //Receive the le data
+                player2.setScore(in.readInt());
+
+                //display
+                display(toSend, received, duelResult, player1, player2);
+
+
+
+            }
+
+            System.out.println("Game ended.");
+            //TODO : Display Scores uwu
+
+            socket.close();
+            in.close();
+            out.close();
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -124,7 +138,7 @@ public class MainLoop {
 
     }
 
-    public static boolean isIn(String check, String[] l) {
+    public static boolean isIn(String check, String... l) {
         for(String el : l) {
             if (check.equals(el)) {
                 return true;
