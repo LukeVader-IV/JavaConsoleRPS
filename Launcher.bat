@@ -1,1 +1,1 @@
-java -jar JavaRPSOnline.jar
+java -jar JavaConsoleRPS.jar
