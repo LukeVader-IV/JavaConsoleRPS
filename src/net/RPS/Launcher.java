@@ -20,7 +20,7 @@ public class Launcher {
 
         while(menu) {
             //display the le stuff
-            System.out.println("\t\tRock Paper Scissor  O N L I NE !\n\n\t\t\t\t\tHugo Costa (Koraku)");
+            System.out.println("\t\tRock Paper Scissor  O N L I N E !\n\n\t\t\t\t\tHugo Costa (Koraku)");
             System.out.println("0 - Host a game\n1 - Join a hosted game\n2 - Quit");
 
             //Input
