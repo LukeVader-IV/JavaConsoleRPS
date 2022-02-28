@@ -107,7 +107,6 @@ public class MainLoop {
             in.close();
             out.close();
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }

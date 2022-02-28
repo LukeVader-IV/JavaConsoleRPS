@@ -1,6 +1,7 @@
 package net.RPS;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -57,6 +58,7 @@ public class Launcher {
         return menu;
     }
 
+    //Join and Host
     private static void hostGame(Scanner scan) {
         System.out.println("Setting up game...");
 
@@ -73,7 +75,7 @@ public class Launcher {
             System.out.print("> ");
             in = scan.next();
             System.out.println();
-
+          
             if (in.length() > 20) {
                 System.out.println("max 20 char.");
                 in = "";
@@ -91,7 +93,7 @@ public class Launcher {
         try {
                
             ss = new ServerSocket(0);
-            System.out.println("Game launched on port " + ss.getLocalPort() + ".\nWaiting for player to connect.");
+            System.out.println("Game launched on "+ getIP() + ":" +ss.getLocalPort() + ".\nWaiting for player to connect.");
 
             other = ss.accept();
             
@@ -158,11 +160,25 @@ public class Launcher {
                 inputCheck = true;
             } catch (IOException e) {
                 System.out.println("Can't create socket :\nCheck internet connection\nCheck IP and Port.\n");
+                e.printStackTrace();
                 inputCheck = true;
             }
         }
         System.out.println("Connection established.\n");
 
         new MainLoop().mainLoop(s, player);    
+    }
+
+    private static String getIP() {
+        String ip = "";
+        try {
+            InetAddress localhost = InetAddress.getLocalHost();
+            ip = localhost.getHostAddress().trim().toString();
+        
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+
+        return ip;
     }
 }

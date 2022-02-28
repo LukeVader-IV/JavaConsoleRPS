@@ -3,7 +3,7 @@ A simple game of Rock Paper Scissor made with java
 
 # Running
 ## Method 1 :
-Open console (cmd or bash) and type `java -jar JavaRPSOnline.jar`
+Open console (cmd or bash) and type `java -jar JavaConsoleRPS.jar`
 
 ## Method 2 :
 Double click on Launcher.bat (windows) or execute Launcher.sh (Linux)
@@ -12,3 +12,5 @@ Double click on Launcher.bat (windows) or execute Launcher.sh (Linux)
 - Computer
 - Java Installed
 
+# Bugs and Issues
+Please report any bug, pull request fixing some might be merged to `main`
