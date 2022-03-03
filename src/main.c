@@ -10,13 +10,14 @@ int main () {
 	printf("0 - Host a game\n1 - Join a hosted game\n2 - Quit\n");
 
 	int input;
-	int success;
+	int inputcheck;
+	int played;
 	do {
-		success = scanf("%d", &input);
+		inputcheck = scanf("%d", &input);
 		switch (input) {
 			case 0:
 				/* server(); */
-				game();
+				played = game();
 				break;
 			case 1:
 				client();
@@ -26,9 +27,9 @@ int main () {
 				printf("not a valid input, please try again");
 				break;
 		}
-	} while (input != 2 && success == 1);
+	} while (input != 2 && inputcheck == 1);
 
-	switch (success) {
+	switch (inputcheck) {
 		case 0:
 			return 1;
 		default:
@@ -43,7 +44,7 @@ int game() {
 	while (move != 4) {
 		printf("Rock(1) / Paper(2) / Scissor(3) (or quit :4) : ");
 		scanf("%d", &move);
-		checkwin(move, rand() % 4);
+		printstate(checkwin(move, rand() % 3));
 	}
 
 	return 0;
@@ -54,14 +55,18 @@ int printstate(int winstate) {
 	switch (winstate)
 		{
 		case 0:
-			printf("LOST");
+			printf("LOST\n");
 			break;
 		case 1:
-			printf("DRAW");
+			printf("DRAW\n");
 			break;
 		case 2:
-			printf("WIN");
+			printf("WIN\n");
 			break;
+		case 5:
+			printf("ILLEGAL MOVE MADE; network/communication issue?\n");
+		default:
+			printf("something went wrong\n");
 		}
 	return 0;
 }
