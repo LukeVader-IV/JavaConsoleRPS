@@ -1,5 +1,6 @@
 #include "network.h"
 #include "moves.h"
+#include "main.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,11 +41,12 @@ int main () {
 
 int game() {
 
+	int success;
 	int move;
 	while (move != 4) {
 		printf("Rock(1) / Paper(2) / Scissor(3) (or quit :4) : ");
 		scanf("%d", &move);
-		printstate(checkwin(move, rand() % 3));
+		success = printstate(checkwin(move -1, rand() % 3));
 	}
 
 	return 0;
@@ -63,6 +65,9 @@ int printstate(int winstate) {
 		case 2:
 			printf("WIN\n");
 			break;
+		case 3:
+			printf("quitting...");
+			return 1;
 		case 5:
 			printf("ILLEGAL MOVE MADE; network/communication issue?\n");
 		default:
