@@ -18,5 +18,8 @@ RockPaperScisors: ./build/main.o ./build/moves.o ./build/network.o
 install:
 	echo "installing is not supported"
 
+clean:
+	rm -rf build/ RockPaperScisors
+
 run: RockPaperScisors
 	./RockPaperScisors
