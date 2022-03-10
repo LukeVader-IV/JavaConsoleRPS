@@ -1,18 +1,15 @@
-#include "players.h"
-#include "network.h"
+#include "../headers/players.h"
+#include "../headers/network.h"
 #include <stdio.h>
-
-int play(int move) {
-	int status = client();
-	return 0;
-}
 
 int CLI_player() {
 	client();
 	return 0;
 }
 
-int play() {
+int success;
+
+int play(int input) {
 	do {
 		success = scanf("%d", &input);
 		switch (input) {
@@ -29,4 +26,5 @@ int play() {
 				break;
 		}
 	} while (input != 3 && success == 1);
+	return 0;
 }

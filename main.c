@@ -1,6 +1,6 @@
-#include "network.h"
-#include "moves.h"
-#include "main.h"
+#include "headers/network.h"
+#include "headers/moves.h"
+#include "headers/main.h"
 
 #include <stdio.h>
 #include <stdlib.h>

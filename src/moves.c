@@ -1,4 +1,4 @@
-#include "moves.h"
+#include "../headers/moves.h"
 
 /* returns: 0 - loss   1 - draw    2 - victory   3 - exiting   5 - ERROR*/
 /* input:   0 - rock   1 - paper   2 - scisors */

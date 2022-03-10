@@ -1,25 +1,22 @@
-all: RockPaperScisors
+TARGET = RockPaperScisors
+SOURCE = main.c
+SOURCES = $(wildcard src/*.c)
+OBJECTS = $(patsubst src/%.c, objects/%.o, $(SOURCES))
 
-RockPaperScisors: ./build/main.o ./build/moves.o ./build/network.o
-	gcc -o RockPaperScisors ./build/main.o ./build/moves.o ./build/network.o
+all: $(TARGET)
 
-./build/main.o: ./src/main.c
-	mkdir -p build
-	gcc -c ./src/main.c -o ./build/main.o
+$(TARGET): $(SOURCE) $(OBJECTS)
+	gcc $^ -o $@
 
-./build/moves.o: ./src/moves.c
-	mkdir -p build
-	gcc -c ./src/moves.c -o ./build/moves.o
-
-./build/network.o: ./src/network.c
-	mkdir -p build
-	gcc -c ./src/network.c -o ./build/network.o
+objects/%.o: src/%.c
+	mkdir -p objects
+	gcc -c $^ -o $@
 
 install:
 	echo "installing is not supported"
 
 clean:
-	rm -rf build/ RockPaperScisors
+	rm -rf objects/* $(TARGET)
 
-run: RockPaperScisors
-	./RockPaperScisors
+run: $(TARGET)
+	./$(TARGET)
