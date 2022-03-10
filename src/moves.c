@@ -18,5 +18,5 @@ int checkwin (int player, int opponent){
 	else if (player > 2 || opponent > 2)
 		return 5;
 
-	return results[player + 2 - opponent];
+	return RESULTS[player + 2 - opponent];
 }
